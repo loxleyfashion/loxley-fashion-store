@@ -1,42 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Loxley Fashion | Collection</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-<body>
+let birdY = 200;
+let velocity = 0;
+const gravity = 1.2;
+const jump = -16;
+let playing = true;
 
-<header class="shop-header">
-  <h2>Loxley Fashion</h2>
-</header>
+canvas.addEventListener("click", () => {
+  velocity = jump;
+});
 
-<div class="products-grid">
+function drawBird() {
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(160, birdY, 12, 0, Math.PI * 2);
+  ctx.fill();
+}
 
-  <a class="product-card"
-     href="https://ig.me/loxley_fashion?text=Hi%20I%20want%20to%20buy%20the%20Classic%20Suit">
-    <img src="images/suit.jpg">
-    <h3>Classic Suit</h3>
-    <p>DM to Order</p>
-  </a>
+function loop() {
+  if (!playing) return;
 
-  <a class="product-card"
-     href="https://ig.me/loxley_fashion?text=Hi%20I%20want%20to%20buy%20the%20Vintage%20Dress">
-    <img src="images/dress.jpg">
-    <h3>Vintage Dress</h3>
-    <p>DM to Order</p>
-  </a>
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  <a class="product-card"
-     href="https://ig.me/loxley_fashion?text=Hi%20I%20want%20to%20buy%20the%20Formal%20Shirt">
-    <img src="images/shirt.jpg">
-    <h3>Formal Shirt</h3>
-    <p>DM to Order</p>
-  </a>
+  velocity += gravity;
+  birdY += velocity;
 
-</div>
+  drawBird();
 
-</body>
-</html>
+  if (birdY > canvas.height || birdY < 0) {
+    endGame();
+  }
 
+  requestAnimationFrame(loop);
+}
+
+function endGame() {
+  playing = false;
+  ctx.fillText("Loading Collection...", 85, 240);
+  setTimeout(() => {
+    window.location.href = "products.html";
+  }, 1500);
+}
+
+// Auto redirect after 10 sec even if no play
+setTimeout(() => {
+  window.location.href = "products.html";
+}, 10000);
+
+loop();
