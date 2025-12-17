@@ -2,9 +2,9 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 let birdY = 200;
-let gravity = 1.2;
-let jump = -18;
 let velocity = 0;
+const gravity = 1.2;
+const jump = -16;
 let playing = true;
 
 canvas.addEventListener("click", () => {
@@ -18,7 +18,7 @@ function drawBird() {
   ctx.fill();
 }
 
-function gameLoop() {
+function loop() {
   if (!playing) return;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -32,21 +32,20 @@ function gameLoop() {
     endGame();
   }
 
-  requestAnimationFrame(gameLoop);
+  requestAnimationFrame(loop);
 }
 
 function endGame() {
   playing = false;
-  ctx.fillText("Loading Collection...", 90, 240);
-
+  ctx.fillText("Loading Collection...", 85, 240);
   setTimeout(() => {
     window.location.href = "products.html";
   }, 1500);
 }
 
-// Auto redirect even if user doesn't play
+// Auto redirect after 10 sec even if no play
 setTimeout(() => {
   window.location.href = "products.html";
 }, 10000);
 
-gameLoop();
+loop();
