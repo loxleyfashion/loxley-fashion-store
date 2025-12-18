@@ -8,35 +8,113 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: #F8F6F3;
+  background: #fff;
   color: #111;
+}
+
+/* NAV */
+.nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 22px;
   text-align: center;
+  z-index: 10;
 }
 
 .logo {
   font-family: 'Playfair Display', serif;
+  letter-spacing: 4px;
   font-size: 26px;
-  margin: 20px 0;
 }
 
-.order-form {
-  max-width: 450px;
-  margin: 40px auto;
+/* HERO */
+.hero {
+  height: 100vh;
+  background-image: url("https://images.unsplash.com/photo-1520975867597-0f5ad1f6f5f2");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  animation: zoomHero 6s ease forwards;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+.hero-content {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  animation: fadeUp 1.2s ease forwards;
 }
 
-.order-form input,
-.order-form select {
-  padding: 12px;
-  border: 1px solid #aaa;
-  font-size: 14px;
+.breadcrumb {
+  letter-spacing: 2px;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 16px;
 }
-.order-form button {
-  padding: 14px;
-  border: none;
-  background: #111;
-  color: #fff;
-  cursor: pointer;
+
+.hero-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+.hero-content p {
+  max-width: 480px;
+  font-size: 15px;
+  opacity: 0.85;
+  margin-bottom: 32px;
+}
+
+.hero-btn {
+  border: 1px solid #fff;
+  padding: 14px 42px;
+  letter-spacing: 2px;
+  font-size: 13px;
+  transition: 0.4s ease;
+}
+
+.hero-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomHero {
+  from {
+    background-size: 105%;
+  }
+  to {
+    background-size: 100%;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 34px;
+  }
 }
