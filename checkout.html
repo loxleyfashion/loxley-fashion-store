@@ -10,32 +10,46 @@
   <div class="logo">LOXLEY</div>
 </header>
 
-<section class="section fade" style="text-align:center">
-  <h1>Confirm Your Order</h1>
-  <p>Secure checkout · Cash on Delivery</p>
+<section class="section">
+  <h2 style="text-align:center">Confirm Your Order</h2>
 
-  <a id="orderBtn" class="btn">Proceed to Order</a>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+  <form class="order-form"
+    method="POST"
+    action="https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse"
+    target="hidden_iframe">
+
+    <!-- PRODUCT -->
+    <input type="hidden" name="entry.2094167033" id="product">
+
+    <!-- CUSTOMER -->
+    <input name="entry.433871083" placeholder="Full Name" required>
+    <input name="entry.1365619003" placeholder="Phone Number" required>
+    <input name="entry.74629137" placeholder="Address" required>
+
+    <select name="entry.2006505239" required>
+      <option value="">Select Size</option>
+      <option>M</option><option>L</option><option>XL</option>
+    </select>
+
+    <input name="entry.95104987" placeholder="City" required>
+    <input name="entry.1455588550" placeholder="Pincode" required>
+
+    <button class="btn">Place Order</button>
+  </form>
 </section>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
+  const p = new URLSearchParams(window.location.search);
+  document.getElementById("product").value = p.get("product");
 
-  const product = params.get("product") || "";
-  const price = params.get("price") || "";
-  const size = params.get("size") || "";
-
-  const formBase =
-    "https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/viewform?usp=pp_url";
-
-  const formURL =
-    `${formBase}` +
-    `&entry.2094167033=${encodeURIComponent(product)}` +
-    `&entry.1365619003=${encodeURIComponent(price)}` +
-    `&entry.2006505239=${encodeURIComponent(size)}`;
-
-  document.getElementById("orderBtn").href = formURL;
+  document.querySelector("form").addEventListener("submit", () => {
+    setTimeout(() => {
+      window.location.href = "success.html";
+    }, 900);
+  });
 </script>
 
-<script src="js/main.js"></script>
 </body>
 </html>
