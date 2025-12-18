@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout – Loxley</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">LOXLEY</div>
+</header>
+
+<section class="section fade" style="text-align:center">
+  <h1>Confirm Your Order</h1>
+  <p>Secure checkout · Cash on Delivery</p>
+
+  <a id="orderBtn" class="btn">Proceed to Order</a>
+</section>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  const product = params.get("product") || "";
+  const price = params.get("price") || "";
+  const size = params.get("size") || "";
+
+  const formBase =
+    "https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/viewform?usp=pp_url";
+
+  const formURL =
+    `${formBase}` +
+    `&entry.2094167033=${encodeURIComponent(product)}` +
+    `&entry.1365619003=${encodeURIComponent(price)}` +
+    `&entry.2006505239=${encodeURIComponent(size)}`;
+
+  document.getElementById("orderBtn").href = formURL;
+</script>
+
+<script src="js/main.js"></script>
+</body>
+</html>
