@@ -6,49 +6,56 @@
 </head>
 <body>
 
-<header>
-  <div class="logo">LOXLEY</div>
-</header>
+<div class="logo">LOXLEY</div>
 
-<section class="section">
-  <h2 style="text-align:center">Confirm Your Order</h2>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
+<form class="order-form"
+      method="POST"
+      action="https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse"
+      target="hidden_iframe">
 
-  <form class="order-form"
-    method="POST"
-    action="https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse"
-    target="hidden_iframe">
+  <!-- AUTO INJECTED PRODUCT -->
+  <input type="hidden" name="entry.2094167033" id="productField">
 
-    <!-- PRODUCT -->
-    <input type="hidden" name="entry.2094167033" id="product">
+  <input type="text" name="entry.433871083" placeholder="Full Name" required>
+  <input type="text" name="entry.1365619003" placeholder="Phone Number" required>
+  <input type="text" name="entry.74629137" placeholder="Address" required>
 
-    <!-- CUSTOMER -->
-    <input name="entry.433871083" placeholder="Full Name" required>
-    <input name="entry.1365619003" placeholder="Phone Number" required>
-    <input name="entry.74629137" placeholder="Address" required>
+  <select name="entry.2006505239" required>
+    <option value="">Select Size</option>
+    <option value="M">M</option>
+    <option value="L">L</option>
+    <option value="XL">XL</option>
+    <option value="XXL">XXL</option>
+  </select>
 
-    <select name="entry.2006505239" required>
-      <option value="">Select Size</option>
-      <option>M</option><option>L</option><option>XL</option>
-    </select>
+  <input name="entry.1455588550" placeholder="Pincode" required>
+  <input name="entry.95104987" placeholder="City" required>
 
-    <input name="entry.95104987" placeholder="City" required>
-    <input name="entry.1455588550" placeholder="Pincode" required>
-
-    <button class="btn">Place Order</button>
-  </form>
-</section>
+  <button type="submit">Place Order</button>
+</form>
 
 <script>
-  const p = new URLSearchParams(window.location.search);
-  document.getElementById("product").value = p.get("product");
+  // Pre-fill product from URL
+  const params = new URLSearchParams(window.location.search);
+  document.getElementById("productField").value =
+    params.get("product") || "Unknown Product";
 
+  // After submission, wait then go to success
+  let formSubmitted = false;
   document.querySelector("form").addEventListener("submit", () => {
-    setTimeout(() => {
-      window.location.href = "success.html";
-    }, 900);
+    formSubmitted = true;
   });
+
+  window.onload = () => {
+    const iframe = document.querySelector("iframe[name='hidden_iframe']");
+    iframe.onload = () => {
+      if (formSubmitted) {
+        location.href = "success.html";
+      }
+    };
+  };
 </script>
 
 </body>
