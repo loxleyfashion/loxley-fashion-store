@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Product | Loxley</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Product | Loxley</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<section class="product-detail">
+<section class="product-page">
+  <div class="container product-layout">
 
-  <div class="gallery">
-    <img id="mainImage" class="main-img">
-    <div class="thumbs" id="thumbs"></div>
-  </div>
-
-  <div class="details">
-    <h1 id="pName"></h1>
-    <p id="pPrice"></p>
-
-    <div class="sizes">
-      <span>S</span>
-      <span>M</span>
-      <span>L</span>
-      <span>XL</span>
+    <div class="product-images">
+      <img id="mainImage" src="" alt="Product Image">
     </div>
 
-    <button id="buyBtn">Buy Now</button>
-  </div>
+    <div class="product-details">
+      <h1 id="productName"></h1>
+      <div class="price">₹<span id="productPrice"></span></div>
 
+      <div class="sizes">
+        <div class="size">S</div>
+        <div class="size">M</div>
+        <div class="size">L</div>
+        <div class="size">XL</div>
+      </div>
+
+      <a href="#" class="btn" id="buyBtn">BUY NOW</a>
+    </div>
+
+  </div>
 </section>
 
 <script src="js/products.js"></script>
-<script src="js/main.js"></script>
+<script src="js/product.js"></script>
 </body>
 </html>
