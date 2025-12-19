@@ -7,18 +7,16 @@ const products = [
       "images/black-tee-1.jpg",
       "images/black-tee-2.jpg",
       "images/black-tee-3.jpg"
-    ],
-    tag: "BESTSELLER"
+    ]
   },
 
   {
-    id: "korean-jogger-black",
-    name: "Korean Joggers – Black",
-    price: 1599,
+    id: "loxley-white-shirt",
+    name: "Loxley Classic White Shirt",
+    price: 1399,
     images: [
-      "images/jogger-black-1.jpg",
-      "images/jogger-black-2.jpg"
-    ],
-    tag: "TRENDING"
+      "images/white-shirt-1.jpg",
+      "images/white-shirt-2.jpg"
+    ]
   }
 ];
