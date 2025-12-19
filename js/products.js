@@ -1,14 +1,26 @@
-const PRODUCTS = [
+const products = [
   {
-    id: "black-tee",
-    name: "Loxley Black Tee",
+    id: "loxley-black-tee",
+    name: "Loxley Premium Black Tee",
     price: 799,
-    image: "blacktee.jpg"
+    category: "tshirts",
+    image: "images/black-tee.jpg",
+    tag: "BESTSELLER"
   },
   {
-    id: "white-tee",
-    name: "Loxley White Tee",
-    price: 799,
-    image: "white-tee.jpg"
+    id: "korean-jogger-black",
+    name: "Korean Joggers – Black",
+    price: 1599,
+    category: "joggers",
+    image: "images/jogger-black.jpg",
+    tag: "TRENDING"
+  },
+  {
+    id: "oversized-hoodie",
+    name: "Oversized Hoodie – Grey",
+    price: 1899,
+    category: "hoodies",
+    image: "images/hoodie-grey.jpg",
+    tag: "NEW"
   }
 ];
