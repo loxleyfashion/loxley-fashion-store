@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Checkout | Loxley Fashion</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Checkout | Loxley</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h2>Complete Your Order</h2>
+<section class="checkout">
+  <div class="form-card">
+    <h2>Customer Details</h2>
 
-<form id="orderForm">
-  <!-- Product -->
-  <input type="text" name="entry.2094167033" id="product" readonly required>
+    <form id="orderForm">
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="address" placeholder="Full Address" required>
 
-  <!-- Customer -->
-  <input type="text" name="entry.433871083" placeholder="Full Name" required>
+      <select name="size" required>
+        <option value="">Select Size</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+      </select>
 
-  <input type="tel" name="entry.1365619003" placeholder="Phone Number" required>
-
-  <input type="text" name="entry.2006505239" placeholder="Size (S / M / L / XL)" required>
-
-  <textarea name="entry.1455588550" placeholder="Full Address" required></textarea>
-
-  <input type="text" name="entry.74629137" placeholder="City" required>
-
-  <input type="text" name="entry.95104987" placeholder="State" required>
-
-  <button type="submit">Place Order</button>
-</form>
-
-<!-- Required for silent submit -->
-<iframe name="hidden_iframe" style="display:none;"></iframe>
+      <button type="submit" class="btn">CONFIRM ORDER</button>
+    </form>
+  </div>
+</section>
 
 <script src="js/main.js"></script>
-
-<script>
-  // Auto-fill product name
-  const params = new URLSearchParams(window.location.search);
-  document.getElementById("product").value =
-    params.get("product") || "Loxley Product";
-</script>
-
 </body>
 </html>
