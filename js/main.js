@@ -1,71 +1,70 @@
-// -------- SHOP PAGE PRODUCT LIST --------
-const productList = document.getElementById("productList");
+// ============================
+// LOAD PRODUCTS ON SHOP PAGE
+// ============================
 
-if (productList && typeof products !== "undefined") {
-  products.forEach(p => {
-    productList.innerHTML += `
-      <div class="product-card">
-        <img src="${p.images[0]}">
-        <h3>${p.name}</h3>
-        <p>₹${p.price}</p>
-        <a href="product.html?id=${p.id}">View</a>
+const grid = document.getElementById("productGrid");
+
+if (grid) {
+  products.forEach(product => {
+    const card = document.createElement("a");
+    card.href = `product.html?id=${product.id}`;
+    card.className = "product-card";
+
+    card.innerHTML = `
+      <img src="${product.images[0]}" alt="${product.name}">
+      <div class="product-info">
+        <h3>${product.name}</h3>
+        <span>₹${product.price}</span>
       </div>
     `;
+
+    grid.appendChild(card);
   });
 }
 
-// -------- PRODUCT PAGE --------
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("id");
+// ============================
+// GOOGLE FORM SILENT SUBMIT
+// ============================
 
-if (productId && typeof products !== "undefined") {
-  const p = products.find(x => x.id === productId);
+const form = document.getElementById("orderForm");
 
-  if (p) {
-    // Title & price
-    document.getElementById("pName").innerText = p.name;
-    document.getElementById("pPrice").innerText = `₹${p.price}`;
+if (form) {
+  const params = new URLSearchParams(window.location.search);
 
-    // Image gallery
-    const mainImg = document.getElementById("mainImage");
-    const thumbs = document.getElementById("thumbs");
+  const productName = params.get("product");
+  const price = params.get("price");
+  const size = params.get("size");
 
-    mainImg.src = p.images[0];
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    p.images.forEach(img => {
-      const thumb = document.createElement("img");
-      thumb.src = img;
-      thumb.onclick = () => {
-        mainImg.classList.add("fade");
-        setTimeout(() => {
-          mainImg.src = img;
-          mainImg.classList.remove("fade");
-        }, 150);
-      };
-      thumbs.appendChild(thumb);
+    const name = form.querySelector('input[name="name"]').value;
+    const phone = form.querySelector('input[name="phone"]').value;
+    const address = form.querySelector('input[name="address"]').value;
+    const city = form.querySelector('input[name="city"]') 
+      ? form.querySelector('input[name="city"]').value 
+      : "";
+
+    const data = new FormData();
+
+    // 🔗 GOOGLE FORM ENTRY IDs (CONFIRMED)
+    data.append("entry.2094167033", name);
+    data.append("entry.1365619003", phone);
+    data.append("entry.433871083", productName);
+    data.append("entry.2006505239", size);
+    data.append("entry.1455588550", price);
+    data.append("entry.74629137", address);
+    data.append("entry.95104987", city);
+
+    fetch(
+      "https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse",
+      {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      }
+    ).then(() => {
+      window.location.href = "success.html";
     });
-
-    // Size select
-    document.querySelectorAll(".sizes span").forEach(s => {
-      s.onclick = () => {
-        document.querySelectorAll(".sizes span").forEach(x =>
-          x.classList.remove("active")
-        );
-        s.classList.add("active");
-      };
-    });
-
-    // Buy button
-    document.getElementById("buyBtn").onclick = () => {
-      const size = document.querySelector(".sizes .active");
-      if (!size) return alert("Please select size");
-
-      localStorage.setItem("product", p.name);
-      localStorage.setItem("price", p.price);
-      localStorage.setItem("size", size.innerText);
-
-      window.location.href =
-        `checkout.html?product=${encodeURIComponent(p.name)}`;
-    };
-  }
+  });
 }
