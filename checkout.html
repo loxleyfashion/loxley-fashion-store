@@ -1,35 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Checkout | Loxley</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Main Style -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<section class="checkout">
-  <div class="form-card">
-    <h2>Customer Details</h2>
+  <section class="checkout">
+    <div class="form-card">
 
-    <form id="orderForm">
-      <input type="text" name="name" placeholder="Full Name" required>
-      <input type="tel" name="phone" placeholder="Phone Number" required>
-      <input type="text" name="address" placeholder="Full Address" required>
+      <!-- Title -->
+      <h2>Customer Details</h2>
 
-      <select name="size" required>
-        <option value="">Select Size</option>
-        <option>S</option>
-        <option>M</option>
-        <option>L</option>
-        <option>XL</option>
-      </select>
+      <!-- Order Summary (Auto Filled) -->
+      <div class="order-summary">
+        <p><strong>Product:</strong> <span id="summaryProduct"></span></p>
+        <p><strong>Price:</strong> ₹<span id="summaryPrice"></span></p>
+        <p><strong>Size:</strong> <span id="summarySize"></span></p>
+      </div>
 
-      <button type="submit" class="btn">CONFIRM ORDER</button>
-    </form>
-  </div>
-</section>
+      <!-- Checkout Form -->
+      <form id="orderForm">
 
-<script src="js/main.js"></script>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          required
+        >
+
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          required
+        >
+
+        <input
+          type="text"
+          name="address"
+          placeholder="Full Address"
+          required
+        >
+
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          required
+        >
+
+        <button type="submit" class="btn">
+          CONFIRM ORDER
+        </button>
+
+      </form>
+
+    </div>
+  </section>
+
+  <!-- JS -->
+  <script src="js/main.js"></script>
+
+  <!-- Order summary script -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    document.getElementById("summaryProduct").innerText =
+      params.get("product") || "-";
+
+    document.getElementById("summaryPrice").innerText =
+      params.get("price") || "-";
+
+    document.getElementById("summarySize").innerText =
+      params.get("size") || "-";
+  </script>
+
 </body>
 </html>
