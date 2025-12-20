@@ -1,48 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product | Loxley Fashion</title>
-
-<link rel="stylesheet" href="css/style.css">
-<script src="js/main.js" defer></script>
-
-<style>
-.carousel {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 16px;
-}
-
-.carousel img {
-  width: 100%;
-  display: none;
-  border-radius: 16px;
-}
-
-.carousel img.active {
-  display: block;
-}
-
-.carousel-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.carousel-controls button {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>Loxley Fashion | Product</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
 </head>
-
 <body>
 
 <header class="container">
@@ -54,44 +18,42 @@
 </header>
 
 <main class="product-page container">
-  <div class="product-layout">
 
-    <!-- PRODUCT IMAGES -->
-    <div class="product-images">
-      <div class="carousel" id="productCarousel"></div>
+  <!-- IMAGE CAROUSEL -->
+  <div class="product-images">
+    <button class="carousel-btn left" id="prevBtn">‹</button>
 
-      <div class="carousel-controls">
-        <button id="prevImg">&lt;</button>
-        <button id="nextImg">&gt;</button>
-      </div>
-    </div>
+    <div id="productCarousel" class="carousel"></div>
 
-    <!-- PRODUCT DETAILS -->
-    <div class="product-details">
-      <h1 id="productName"></h1>
-      <p class="price" id="productPrice"></p>
-
-      <!-- SIZE -->
-      <div class="sizes" id="sizeContainer"></div>
-
-      <!-- ORDER FORM -->
-      <form id="orderForm" class="form-card">
-        <h2>Order Details</h2>
-
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="tel" name="phone" placeholder="Phone Number" required>
-        <input type="text" name="address" placeholder="Address" required>
-        <input type="text" name="city" placeholder="City">
-
-        <input type="hidden" name="product" id="formProduct">
-        <input type="hidden" name="price" id="formPrice">
-        <input type="hidden" name="size" id="formSize">
-
-        <button type="submit">BUY NOW</button>
-      </form>
-    </div>
-
+    <button class="carousel-btn right" id="nextBtn">›</button>
   </div>
+
+  <!-- PRODUCT INFO -->
+  <div class="product-info">
+    <h2 id="productName"></h2>
+    <p id="productPrice"></p>
+
+    <!-- SIZE -->
+    <div id="sizeContainer" class="sizes"></div>
+
+    <!-- ORDER FORM -->
+    <form id="orderForm" class="order-box">
+      <h3>Order Details</h3>
+
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="address" placeholder="Address" required>
+      <input type="text" name="city" placeholder="City">
+
+      <!-- hidden -->
+      <input type="hidden" name="product" id="formProduct">
+      <input type="hidden" name="price" id="formPrice">
+      <input type="hidden" name="size" id="formSize">
+
+      <button type="submit" class="buy-btn">BUY NOW</button>
+    </form>
+  </div>
+
 </main>
 
 </body>
