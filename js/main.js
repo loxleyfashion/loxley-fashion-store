@@ -1,103 +1,204 @@
-let currentSlide = 0;
+// ============================
+// Loxley Fashion Main JS
+// ============================
 
-// ================= IMAGE CLEAN =================
+// 🔥 CLEAN IMAGE URL (CRITICAL FIX)
 function cleanImage(url) {
+  if (!url) return "";
+
   return url
-    .replace(/\r?\n|\r/g, "")
-    .trim()
+    .replace(/\r?\n|\r/g, "")      // remove line breaks from Google Sheet
+    .trim()                        // remove spaces
+    .replace(/^"+|"+$/g, "")       // remove quotes
     .replace(/\.jpg\.jpg$/i, ".jpg")
     .replace(/\.png\.png$/i, ".png");
 }
 
-// ================= CSV PARSER =================
-function parseCSVRow(row) {
-  return row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-}
-
-// ================= FETCH PRODUCTS =================
+// ============================
+// FETCH PRODUCTS FROM GOOGLE SHEET
+// ============================
 async function getProducts() {
-  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/pub?output=csv";
-  const res = await fetch(url);
-  const text = await res.text();
-  const rows = text.split("\n").slice(1);
+  const sheetURL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/pub?output=csv";
 
-  return rows.map(r => {
-    const c = parseCSVRow(r);
+  const response = await fetch(sheetURL);
+  const data = await response.text();
+
+  const rows = data.split("\n").slice(1); // skip header
+
+  return rows.map(row => {
+    const cols = row.split(",");
+
     return {
-      id: c[0],
-      name: c[1],
-      price: c[2],
-      images: c.slice(3).map(cleanImage).filter(i => i.startsWith("http"))
+      id: cols[0]?.trim(),
+      name: cols[1]?.trim(),
+      price: cols[2]?.trim(),
+      images: cols
+        .slice(3)
+        .map(img => cleanImage(img))
+        .filter(Boolean)
     };
   });
 }
 
-// ================= LOAD PRODUCT PAGE =================
-async function loadProductPage() {
-  const id = new URLSearchParams(window.location.search).get("id");
-  if (!id) return;
+// ============================
+// LOAD PRODUCTS ON SHOP PAGE
+// ============================
+async function loadShopProducts() {
+  const grid = document.getElementById("productGrid");
+  if (!grid) return;
 
   const products = await getProducts();
-  const product = products.find(p => p.id === id);
+  grid.innerHTML = "";
+
+  products.forEach(product => {
+    if (!product.images.length) return;
+
+    const card = document.createElement("a");
+    card.href = `product.html?id=${product.id}`;
+    card.className = "product-card";
+
+    card.innerHTML = `
+      <img src="${product.images[0]}" alt="${product.name}" loading="lazy">
+      <div class="product-info">
+        <h3>${product.name}</h3>
+        <span>₹${product.price}</span>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+// ============================
+// PRODUCT PAGE LOAD
+// ============================
+async function loadProductPage() {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
+  if (!productId) return;
+
+  const products = await getProducts();
+  const product = products.find(p => p.id === productId);
   if (!product) return;
 
+  // Set product text
   document.getElementById("productName").textContent = product.name;
-  document.getElementById("productPrice").textContent = "₹" + product.price;
+  document.getElementById("productPrice").textContent = `₹${product.price}`;
   document.getElementById("formProduct").value = product.name;
   document.getElementById("formPrice").value = product.price;
 
+  // Load images
   const carousel = document.getElementById("productCarousel");
   carousel.innerHTML = "";
 
-  product.images.forEach((src, i) => {
+  product.images.forEach((src, index) => {
     const img = document.createElement("img");
     img.src = src;
-    if (i === 0) img.classList.add("active");
+    img.alt = product.name;
+    img.loading = "lazy";
+
+    if (index === 0) img.classList.add("active");
+
+    img.onerror = () => {
+      img.src = "images/placeholder.jpg"; // fallback image
+    };
+
     carousel.appendChild(img);
   });
 
-  setupCarousel();
-  setupSizes();
-}
+  // ============================
+  // PRODUCT CAROUSEL BUTTONS
+  // ============================
+  let currentIndex = 0;
+  const prevBtn = document.getElementById("prevImg");
+  const nextBtn = document.getElementById("nextImg");
 
-// ================= CAROUSEL LOGIC =================
-function setupCarousel() {
-  const images = document.querySelectorAll("#productCarousel img");
-  if (!images.length) return;
+  function showImage(index) {
+    const imgs = carousel.querySelectorAll("img");
+    imgs.forEach((img, i) => img.classList.toggle("active", i === index));
+  }
 
-  document.getElementById("nextBtn").onclick = () => {
-    images[currentSlide].classList.remove("active");
-    currentSlide = (currentSlide + 1) % images.length;
-    images[currentSlide].classList.add("active");
-  };
-
-  document.getElementById("prevBtn").onclick = () => {
-    images[currentSlide].classList.remove("active");
-    currentSlide = (currentSlide - 1 + images.length) % images.length;
-    images[currentSlide].classList.add("active");
-  };
-}
-
-// ================= SIZE =================
-function setupSizes() {
-  const sizes = ["S", "M", "L", "XL"];
-  const box = document.getElementById("sizeContainer");
-  box.innerHTML = "";
-
-  sizes.forEach(size => {
-    const s = document.createElement("span");
-    s.className = "size";
-    s.textContent = size;
-    s.onclick = () => {
-      document.querySelectorAll(".size").forEach(x => x.classList.remove("active"));
-      s.classList.add("active");
-      document.getElementById("formSize").value = size;
-    };
-    box.appendChild(s);
+  prevBtn.addEventListener("click", () => {
+    const imgs = carousel.querySelectorAll("img");
+    if (!imgs.length) return;
+    currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+    showImage(currentIndex);
   });
 
-  box.firstChild.click();
+  nextBtn.addEventListener("click", () => {
+    const imgs = carousel.querySelectorAll("img");
+    if (!imgs.length) return;
+    currentIndex = (currentIndex + 1) % imgs.length;
+    showImage(currentIndex);
+  });
+
+  showImage(currentIndex);
+
+  // ============================
+  // SIZE SELECTION
+  // ============================
+  const sizes = ["S", "M", "L", "XL"];
+  const sizeContainer = document.getElementById("sizeContainer");
+  sizeContainer.innerHTML = "";
+
+  sizes.forEach(size => {
+    const span = document.createElement("span");
+    span.className = "size";
+    span.textContent = size;
+
+    span.addEventListener("click", () => {
+      document.querySelectorAll(".size").forEach(s =>
+        s.classList.remove("active")
+      );
+      span.classList.add("active");
+      document.getElementById("formSize").value = size;
+    });
+
+    sizeContainer.appendChild(span);
+  });
+
+  // Default size
+  sizeContainer.querySelector(".size")?.click();
 }
 
-// ================= INIT =================
-document.addEventListener("DOMContentLoaded", loadProductPage);
+// ============================
+// GOOGLE FORM ORDER SUBMIT
+// ============================
+function setupOrderForm() {
+  const form = document.getElementById("orderForm");
+  if (!form) return;
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("entry.2094167033", form.name.value);
+    data.append("entry.1365619003", form.phone.value);
+    data.append("entry.433871083", form.product.value);
+    data.append("entry.2006505239", form.size.value);
+    data.append("entry.1455588550", form.price.value);
+    data.append("entry.74629137", form.address.value);
+    data.append("entry.95104987", form.city.value || "");
+
+    fetch(
+      "https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse",
+      {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      }
+    ).then(() => {
+      window.location.href = "success.html";
+    });
+  });
+}
+
+// ============================
+// INIT
+// ============================
+document.addEventListener("DOMContentLoaded", () => {
+  loadShopProducts();
+  loadProductPage();
+  setupOrderForm();
+});
