@@ -1,22 +1,32 @@
-const products = [
-  {
-    id: "loxley-black-tee",
-    name: "Loxley Premium Black Tee",
-    price: 799,
-    images: [
-      "images/black-tee-1.jpg",
-      "images/black-tee-2.jpg",
-      "images/black-tee-3.jpg"
-    ]
-  },
+// =====================================
+// EASY PRODUCT MODE – GOOGLE SHEET
+// =====================================
 
-  {
-    id: "loxley-white-shirt",
-    name: "Loxley Classic White Shirt",
-    price: 1399,
-    images: [
-      "images/white-shirt-1.jpg",
-      "images/white-shirt-2.jpg"
-    ]
-  }
-];
+const SHEET_URL =
+  "https://opensheet.elk.sh/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/products";
+
+let products = [];
+
+// Fetch products from Google Sheet
+fetch(SHEET_URL)
+  .then(res => res.json())
+  .then(data => {
+    products = data.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      images: [
+        item.image1,
+        item.image2,
+        item.image3
+      ].filter(Boolean)
+    }));
+
+    // Trigger shop load if exists
+    if (typeof loadShopProducts === "function") {
+      loadShopProducts();
+    }
+  })
+  .catch(err => {
+    console.error("Product Sheet Error:", err);
+  });
