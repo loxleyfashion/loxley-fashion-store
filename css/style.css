@@ -230,3 +230,35 @@ input, select {
     transform: translateY(0);
   }
   }
+
+/* =========================
+   MOBILE FIXES (IMPORTANT)
+   ========================= */
+
+@media (max-width: 768px) {
+
+  .product-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .checkout {
+    padding: 60px 16px;
+  }
+
+  .form-card {
+    width: 100%;
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+
+  header.container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  nav {
+    display: flex;
+    gap: 14px;
+  }
+}
