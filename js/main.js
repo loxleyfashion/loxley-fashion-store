@@ -2,22 +2,22 @@
 // Loxley Fashion Main JS
 // ============================
 
-// Fetch products from products.js or Google Sheet (async safe)
+// Fetch products from Google Sheet
 async function getProducts() {
-  // If you are loading from static array:
-  if (typeof products !== "undefined") return products;
-
-  // Example: Fetch from Google Sheet JSON
-  const sheetURL = "https://spreadsheets.google.com/feeds/list/YOUR_SHEET_ID/od6/public/values?alt=json";
-  const res = await fetch(sheetURL);
-  const data = await res.json();
-  
-  return data.feed.entry.map((item, index) => ({
-    id: "p" + index,
-    name: item.gsx$name.$t,
-    price: item.gsx$price.$t,
-    images: [item.gsx$image1.$t, item.gsx$image2.$t, item.gsx$image3.$t].filter(Boolean)
-  }));
+  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/pub?output=csv";
+  const response = await fetch(sheetURL);
+  const data = await response.text();
+  const rows = data.split("\n").slice(1); // skip header
+  const products = rows.map(row => {
+    const cols = row.split(",");
+    return {
+      id: cols[0],
+      name: cols[1],
+      price: cols[2],
+      images: cols.slice(3).filter(Boolean) // supports multiple images
+    };
+  });
+  return products;
 }
 
 // ============================
@@ -25,8 +25,9 @@ async function getProducts() {
 // ============================
 async function loadShopProducts() {
   const grid = document.getElementById("productGrid");
+  if (!grid) return;
+
   const products = await getProducts();
-  if (!grid || !Array.isArray(products)) return;
   grid.innerHTML = "";
 
   products.forEach(product => {
@@ -55,40 +56,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   const products = await getProducts();
   const product = products.find(p => p.id === productId);
 
-  if (!product) return;
+  if (product) {
+    // Set product details
+    document.getElementById("productName").textContent = product.name;
+    document.getElementById("productPrice").textContent = `₹${product.price}`;
+    document.getElementById("formProduct").value = product.name;
+    document.getElementById("formPrice").value = product.price;
 
-  // Set main details
-  document.getElementById("productName").textContent = product.name;
-  document.getElementById("productPrice").textContent = `₹${product.price}`;
-  document.getElementById("formProduct").value = product.name;
-  document.getElementById("formPrice").value = product.price;
-
-  // Load Images
-  const imageContainer = document.getElementById("productImages");
-  product.images.forEach((img, index) => {
-    const image = document.createElement("img");
-    image.src = img;
-    if (index === 0) image.classList.add("active");
-    imageContainer.appendChild(image);
-  });
-
-  // Size options
-  const sizes = ["S","M","L","XL"];
-  const sizeContainer = document.getElementById("sizeContainer");
-  sizes.forEach(size => {
-    const span = document.createElement("span");
-    span.className = "size";
-    span.textContent = size;
-    span.addEventListener("click", () => {
-      document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
-      span.classList.add("active");
-      document.getElementById("formSize").value = size;
+    // Load product images
+    const imageContainer = document.getElementById("productImages");
+    product.images.forEach((img, index) => {
+      const image = document.createElement("img");
+      image.src = img;
+      if (index === 0) image.classList.add("active");
+      imageContainer.appendChild(image);
     });
-    sizeContainer.appendChild(span);
-  });
 
-  // Select default size
-  document.querySelector(".size").click();
+    // Size selection
+    const sizes = ["S","M","L","XL"];
+    const sizeContainer = document.getElementById("sizeContainer");
+    sizes.forEach(size => {
+      const span = document.createElement("span");
+      span.className = "size";
+      span.textContent = size;
+      span.addEventListener("click", () => {
+        document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
+        span.classList.add("active");
+        document.getElementById("formSize").value = size;
+      });
+      sizeContainer.appendChild(span);
+    });
+
+    // Select default size
+    document.querySelector(".size").click();
+  }
 
   // ============================
   // GOOGLE FORM SILENT SUBMIT
@@ -114,11 +115,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       data.append("entry.74629137", address);
       data.append("entry.95104987", city);
 
-      fetch("https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse", {
-        method: "POST",
-        mode: "no-cors",
-        body: data
-      }).then(() => {
+      fetch(
+        "https://docs.google.com/forms/d/e/1FAIpQLScKUjwd3C46jdW_NDOFTzc1Lobiy2_trqGuc1izN1Y8aMdi6Q/formResponse",
+        {
+          method: "POST",
+          mode: "no-cors",
+          body: data
+        }
+      ).then(() => {
         window.location.href = "success.html";
       });
     });
