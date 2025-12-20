@@ -1,32 +1,18 @@
-// =====================================
-// EASY PRODUCT MODE – GOOGLE SHEET
-// =====================================
+// js/products.js
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/pub?output=csv";
 
-const SHEET_URL =
-  "https://opensheet.elk.sh/2PACX-1vRP0BOsRW5H8ddhTP_rWI6r1-zFlKKzcXb0GS80Okit145N07tzJ0K_oR274zycv1ZFz8s9I2ldplrq/products";
+async function getProducts() {
+  const res = await fetch(SHEET_URL);
+  const text = await res.text();
 
-let products = [];
-
-// Fetch products from Google Sheet
-fetch(SHEET_URL)
-  .then(res => res.json())
-  .then(data => {
-    products = data.map(item => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      images: [
-        item.image1,
-        item.image2,
-        item.image3
-      ].filter(Boolean)
-    }));
-
-    // Trigger shop load if exists
-    if (typeof loadShopProducts === "function") {
-      loadShopProducts();
-    }
-  })
-  .catch(err => {
-    console.error("Product Sheet Error:", err);
+  const rows = text.trim().split("\n").slice(1); // skip header
+  return rows.map(row => {
+    const [id, name, price, images] = row.split(",");
+    return {
+      id: id.trim(),
+      name: name.trim(),
+      price: price.trim(),
+      images: images.split("|").map(img => img.trim()) // multiple images separated by |
+    };
   });
+}
