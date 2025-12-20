@@ -1,11 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Loxley Fashion | Product</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/main.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product - Loxley Fashion</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/main.js" defer></script>
+<style>
+/* =========================
+   PRODUCT PAGE – FIXES
+   ========================= */
+.carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.carousel img {
+  display: none;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.carousel img.active {
+  display: block;
+}
+
+.carousel-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel-btn.left {
+  left: 10px;
+}
+
+.carousel-btn.right {
+  right: 10px;
+}
+
+.buy-btn {
+  width: 100%;
+  padding: 14px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.buy-btn:hover {
+  opacity: 0.9;
+}
+</style>
 </head>
 <body>
 
@@ -18,42 +76,36 @@
 </header>
 
 <main class="product-page container">
+  <div class="product-layout">
+    <!-- Product Images -->
+    <div class="product-images">
+      <div class="carousel" id="productCarousel"></div>
+      <button class="carousel-btn left" id="prevImg">&lt;</button>
+      <button class="carousel-btn right" id="nextImg">&gt;</button>
+    </div>
 
-  <!-- IMAGE CAROUSEL -->
-  <div class="product-images">
-    <button class="carousel-btn left" id="prevBtn">‹</button>
+    <!-- Product Details -->
+    <div class="product-details">
+      <h1 id="productName"></h1>
+      <p class="price" id="productPrice"></p>
 
-    <div id="productCarousel" class="carousel"></div>
+      <!-- Size Selection -->
+      <div class="sizes" id="sizeContainer"></div>
 
-    <button class="carousel-btn right" id="nextBtn">›</button>
+      <!-- Customer Details Form -->
+      <form id="orderForm" class="form-card">
+        <h2>Order Details</h2>
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="text" name="city" placeholder="City">
+        <input type="hidden" name="product" id="formProduct">
+        <input type="hidden" name="price" id="formPrice">
+        <input type="hidden" name="size" id="formSize">
+        <button type="submit" class="buy-btn">BUY NOW</button>
+      </form>
+    </div>
   </div>
-
-  <!-- PRODUCT INFO -->
-  <div class="product-info">
-    <h2 id="productName"></h2>
-    <p id="productPrice"></p>
-
-    <!-- SIZE -->
-    <div id="sizeContainer" class="sizes"></div>
-
-    <!-- ORDER FORM -->
-    <form id="orderForm" class="order-box">
-      <h3>Order Details</h3>
-
-      <input type="text" name="name" placeholder="Full Name" required>
-      <input type="tel" name="phone" placeholder="Phone Number" required>
-      <input type="text" name="address" placeholder="Address" required>
-      <input type="text" name="city" placeholder="City">
-
-      <!-- hidden -->
-      <input type="hidden" name="product" id="formProduct">
-      <input type="hidden" name="price" id="formPrice">
-      <input type="hidden" name="size" id="formSize">
-
-      <button type="submit" class="buy-btn">BUY NOW</button>
-    </form>
-  </div>
-
 </main>
 
 </body>
