@@ -262,3 +262,57 @@ input, select {
     gap: 14px;
   }
 }
+
+/* =========================
+   PRODUCT PAGE – FIXES
+   ========================= */
+
+.carousel img {
+  display: none;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.carousel img.active {
+  display: block;
+}
+
+.carousel-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carousel-btn.left {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel-btn.right {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.buy-btn {
+  width: 100%;
+  padding: 14px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.buy-btn:hover {
+  opacity: 0.9;
+}
