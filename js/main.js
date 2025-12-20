@@ -1,10 +1,13 @@
 // ============================
-// LOAD PRODUCTS ON SHOP PAGE
+// LOAD PRODUCTS (SAFE ASYNC)
 // ============================
 
-const grid = document.getElementById("productGrid");
+function loadShopProducts() {
+  const grid = document.getElementById("productGrid");
+  if (!grid || !Array.isArray(products)) return;
 
-if (grid) {
+  grid.innerHTML = "";
+
   products.forEach(product => {
     const card = document.createElement("a");
     card.href = `product.html?id=${product.id}`;
