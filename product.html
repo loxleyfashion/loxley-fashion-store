@@ -3,45 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product - Loxley Fashion</title>
+<title>Product | Loxley Fashion</title>
+
 <link rel="stylesheet" href="css/style.css">
-<script src="js/products.js" defer></script>
 <script src="js/main.js" defer></script>
+
 <style>
-  /* Simple carousel styling */
-  .carousel {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 16px;
-  }
-  .carousel img {
-    width: 100%;
-    display: none;
-    border-radius: 16px;
-  }
-  .carousel img.active {
-    display: block;
-  }
-  .carousel-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-  .carousel-controls button {
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  .carousel-controls button:hover {
-    background: #333;
-  }
+.carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.carousel img {
+  width: 100%;
+  display: none;
+  border-radius: 16px;
+}
+
+.carousel img.active {
+  display: block;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.carousel-controls button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 </style>
 </head>
+
 <body>
 
 <header class="container">
@@ -54,71 +55,44 @@
 
 <main class="product-page container">
   <div class="product-layout">
-    <!-- Product Images -->
+
+    <!-- PRODUCT IMAGES -->
     <div class="product-images">
       <div class="carousel" id="productCarousel"></div>
+
       <div class="carousel-controls">
         <button id="prevImg">&lt;</button>
         <button id="nextImg">&gt;</button>
       </div>
     </div>
 
-    <!-- Product Details -->
+    <!-- PRODUCT DETAILS -->
     <div class="product-details">
       <h1 id="productName"></h1>
       <p class="price" id="productPrice"></p>
 
-      <!-- Size Selection -->
+      <!-- SIZE -->
       <div class="sizes" id="sizeContainer"></div>
 
-      <!-- Customer Details Form -->
+      <!-- ORDER FORM -->
       <form id="orderForm" class="form-card">
         <h2>Order Details</h2>
+
         <input type="text" name="name" placeholder="Full Name" required>
         <input type="tel" name="phone" placeholder="Phone Number" required>
         <input type="text" name="address" placeholder="Address" required>
         <input type="text" name="city" placeholder="City">
+
         <input type="hidden" name="product" id="formProduct">
         <input type="hidden" name="price" id="formPrice">
         <input type="hidden" name="size" id="formSize">
-        <button type="submit" class="btn submit-btn">BUY NOW</button>
+
+        <button type="submit">BUY NOW</button>
       </form>
     </div>
+
   </div>
 </main>
-
-<script>
-  // =========================
-  // PRODUCT PAGE CAROUSEL
-  // =========================
-  let currentIndex = 0;
-  const carousel = document.getElementById("productCarousel");
-  const prevBtn = document.getElementById("prevImg");
-  const nextBtn = document.getElementById("nextImg");
-
-  function showImage(index) {
-    const imgs = carousel.querySelectorAll("img");
-    imgs.forEach((img, i) => img.classList.toggle("active", i === index));
-  }
-
-  prevBtn.addEventListener("click", () => {
-    const imgs = carousel.querySelectorAll("img");
-    currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
-    showImage(currentIndex);
-  });
-
-  nextBtn.addEventListener("click", () => {
-    const imgs = carousel.querySelectorAll("img");
-    currentIndex = (currentIndex + 1) % imgs.length;
-    showImage(currentIndex);
-  });
-
-  // Show first image on load
-  document.addEventListener("DOMContentLoaded", () => {
-    const imgs = carousel.querySelectorAll("img");
-    if (imgs.length) showImage(0);
-  });
-</script>
 
 </body>
 </html>
