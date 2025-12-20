@@ -2,14 +2,13 @@
 // Loxley Fashion Main JS
 // ============================
 
-// 🔥 CLEAN IMAGE URL (CRITICAL FIX)
+// 🔹 CLEAN IMAGE URL
 function cleanImage(url) {
   if (!url) return "";
-
   return url
-    .replace(/\r?\n|\r/g, "")      // remove line breaks from Google Sheet
-    .trim()                        // remove spaces
-    .replace(/^"+|"+$/g, "")       // remove quotes
+    .replace(/\r?\n|\r/g, "")       // remove line breaks
+    .trim()                         // remove spaces
+    .replace(/^"+|"+$/g, "")        // remove quotes
     .replace(/\.jpg\.jpg$/i, ".jpg")
     .replace(/\.png\.png$/i, ".png");
 }
@@ -82,33 +81,29 @@ async function loadProductPage() {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
-  // Set product text
+  // Set product details
   document.getElementById("productName").textContent = product.name;
   document.getElementById("productPrice").textContent = `₹${product.price}`;
   document.getElementById("formProduct").value = product.name;
   document.getElementById("formPrice").value = product.price;
 
-  // Load images
+  // Load images into carousel
   const carousel = document.getElementById("productCarousel");
   carousel.innerHTML = "";
-
   product.images.forEach((src, index) => {
     const img = document.createElement("img");
     img.src = src;
     img.alt = product.name;
     img.loading = "lazy";
-
     if (index === 0) img.classList.add("active");
-
     img.onerror = () => {
-      img.src = "images/placeholder.jpg"; // fallback image
+      img.src = "images/placeholder.jpg";
     };
-
     carousel.appendChild(img);
   });
 
   // ============================
-  // PRODUCT CAROUSEL BUTTONS
+  // CAROUSEL FUNCTIONALITY
   // ============================
   let currentIndex = 0;
   const prevBtn = document.getElementById("prevImg");
@@ -121,19 +116,18 @@ async function loadProductPage() {
 
   prevBtn.addEventListener("click", () => {
     const imgs = carousel.querySelectorAll("img");
-    if (!imgs.length) return;
     currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
     showImage(currentIndex);
   });
 
   nextBtn.addEventListener("click", () => {
     const imgs = carousel.querySelectorAll("img");
-    if (!imgs.length) return;
     currentIndex = (currentIndex + 1) % imgs.length;
     showImage(currentIndex);
   });
 
-  showImage(currentIndex);
+  // Default first image
+  showImage(0);
 
   // ============================
   // SIZE SELECTION
@@ -158,7 +152,7 @@ async function loadProductPage() {
     sizeContainer.appendChild(span);
   });
 
-  // Default size
+  // Select default size
   sizeContainer.querySelector(".size")?.click();
 }
 
